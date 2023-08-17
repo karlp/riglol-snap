@@ -4,12 +4,21 @@ Grab a "screenshot" from a rigol 1000D/E series.
 Uses an undocumented :lcd:data? method discovered on
 https://www.improwis.com/projects/sw_USBTMC_RigolScopeWifi/
 """
+import argparse
 import datetime
 import pyvisa
 from PIL import Image as im
 
 
-def new_style():
+def get_args():
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-f", "--file", help="output file name, default will be auto timestamped")
+    options = parser.parse_args()
+    return options
+
+
+def new_style(opts):
     # lol, just dump the screen via a private undocumented command.
     # Thank you: https://www.improwis.com/projects/sw_USBTMC_RigolScopeWifi/
     rm = pyvisa.ResourceManager()
@@ -48,11 +57,13 @@ def new_style():
         out.append((x & 0x7) << 5)
     dat = im.frombytes("RGB", (320, 234), bytes(out))
     dstr = datetime.datetime.now().strftime("%Y%m%dT%H%M%S.%f")
-    fname = f"snap-riglol-{dstr}.png"
+
+    fname = getattr(opts, "file", f"snap-riglol-{dstr}.png")
     dat.save(fname)
     print(f" -> saved to {fname}")
 
 
 if __name__ == "__main__":
-    new_style()
+    opts = get_args()
+    new_style(opts)
 
