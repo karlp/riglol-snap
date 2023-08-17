@@ -3,6 +3,10 @@ This grabs a screenshot from a DS1000D/E series scope via the
 undocumented ```:lcd:data?``` SCPI method.
 The "undocumented" method was helpfull described at https://www.improwis.com/projects/sw_USBTMC_RigolScopeWifi/
 
+The intention here is for you to just keep using your scope as normal, but to simply grab screenshots,
+instead of having to save them to a usb thumb drive, using the nasty file naming UI on the scope.
+This does **not** attempt to provide any sort of control or cursors or anything!
+
 Later DS1000Z series scopes have a native PNG method, but the older
 D/E series don't have anything documented.
 
@@ -23,6 +27,9 @@ Opening device: DS1EA122700492 -> saved to snap-riglol-20230817T101804.682946.pn
 The top section of the image is sometimes "rotated".  I have no idea why.  Power cycling the scope
 will sometimes change the amount of the rotation, but it's always a small amount,
 and always seems to be the same height.
+
+pyvisa is (relatively) slow to generate a list of plausible devices.  While I can pre-filter to just
+suitable ones, I haven't found a way to not even look at anything other than USB devices. 
 
 Currently, this expects to receive a raw data block back, without the SCPI #<1-9>nnnnnnnn<binary>
 header.  According to [improwis](https://www.improwis.com/projects/sw_USBTMC_RigolScopeWifi/) later firmware
