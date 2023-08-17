@@ -21,20 +21,11 @@ This was tested on a DS1102D, running firmware 00.02.04
 $ python riglol-snap.py 
 Opening device: DS1EA122700492 -> saved to snap-riglol-20230817T101804.682946.png
 ```
-![example rigol screen capture](snap-riglol-20230817T101804.682946.png)
+![example rigol screen capture](snap-riglol-example.png)
 
 # Bugs
-The top section of the image is sometimes "rotated".  I have no idea why.  Power cycling the scope
-will sometimes change the amount of the rotation, but it's always a small amount,
-and always seems to be the same height.
-
 pyvisa is (relatively) slow to generate a list of plausible devices.  While I can pre-filter to just
 suitable ones, I haven't found a way to not even look at anything other than USB devices. 
-
-Currently, this expects to receive a raw data block back, without the SCPI #<1-9>nnnnnnnn<binary>
-header.  According to [improwis](https://www.improwis.com/projects/sw_USBTMC_RigolScopeWifi/) later firmware
-revisions may correctly include the header.  To support this, the *IDN? query can be checked for the firmware
-version, and the relevant tweaks the to pyvisa calls could be made.  Would need more testing.
 
 # LICENSE
 Licensed under your choice of the following SPDX IDs, whichver makes your own life easier
