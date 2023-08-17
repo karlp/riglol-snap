@@ -31,10 +31,12 @@ def new_style():
 
     # Apparently newer firmware may include the header, and then you wouldn't need most of this...
     # _could_ use the IDN result (which has firmware) but would need more test data... riiiight
-    dev.write(":lcd:data?")
     # Despite starting with a "#800074880" block, pyvisa ieee decoding fails to read this
-    # so just do a raw read :(
-    rawlcd = dev.read_raw(74880+10)[10:]
+    # without changing chunk size, as per their own FAQ.
+    rawlcd = dev.query_binary_values(":lcd:data?", datatype='B', chunk_size=100000)
+    # Simple doing it raw works too...
+    #dev.write(":lcd:data?")
+    #rawlcd = dev.read_raw(74880+10)[10:]
     #  (raw 320x234 2:3:3 LCD dump, 74880 bytes)
 
     # expand everything from 2:3:3 to 8:8:8 pixels....
